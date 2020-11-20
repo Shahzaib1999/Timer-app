@@ -19,36 +19,27 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Installs Node JS
-      - name: Install NodeJS
-        uses: actions/setup-node@v2-beta
-        with:
-          node-versio: 12 
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
     
-      # Installs React dependencies
-      - name: Install pakages
-        run: npm install
+    - name: Install NodeJS
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: 12
+    
+    - uses: borales/actions-yarn@v2.0.0
+      with:
+        cmd: install # will run `yarn install` command
+    
+    - name : Test React App
+      run : yarn run test
         
-      # Installs React dependencies
-      - name: Install pakages
-        run: npm i -D ts-jest jest-fetch-mock enzyme enzyme-adapter-react-16 enzyme-to-json @types/enzyme @types/enzyme-adapter-react-16 --save-exact
-
-      # Builds the App
-      - name: Build React App
-        run: |
-          npm install # Install Dependencies
-          CI=false npm run build # CI=false to ignore warnings
-      # Installs Surge
-      - name: Install surge
-        run: sudo npm install -g surge
-
-      # Installs React dependencies
-      - name: Testing
-        run: npm test
+    - name: Build React App
+      run: yarn build
+      
+    - name: Install Surge
+      run: npm install --global surge
 
       # Deploys to Surge
-      - name: Deploy to surge
-        run: surge ./build timer-app-1999.surge.sh --token ${{ secrets.SURGE_TOKEN }}
+    - name: Deploy to surge
+      run: surge ./build timer-app-1999.surge.sh --token ${{ secrets.SURGE_TOKEN }}
