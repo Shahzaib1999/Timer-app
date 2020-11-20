@@ -47,7 +47,7 @@ jobs:
 
       # Installs React dependencies
       - name: Testing
-        run: sudo npm run test
+        run: npm test
 
       # Deploys to Surge
       - name: Deploy to surge
